@@ -1,9 +1,6 @@
+import Link from "next/link"
 
 export default function Login() {
-
-    const handleButton = () => {
-        
-    }
 
     return (
         <div className="flex justify-center items-center min-h-screen">
@@ -26,7 +23,9 @@ export default function Login() {
                 </div>
 
                 <div>
-                    <button className="w-full">Login</button>
+                    <Link href="/orders" legacyBehavior>
+                        <a className="btn w-full">Login</a>
+                    </Link>
                 </div>
             
             </div>
