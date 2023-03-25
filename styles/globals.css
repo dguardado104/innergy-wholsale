@@ -33,3 +33,12 @@ input:focus, input:active{
     height: 1px;
     background-color: #222;
 }
+
+.sizes-block > div{
+    display: flex;
+    flex-direction: column;
+}
+
+.sizes-block input{
+    width: 75px;
+}
