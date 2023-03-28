@@ -6,9 +6,7 @@ import Link from "next/link"
 
 export default function Index({allProducts, setAllProducts}){
 
-
   return (
-  
   <Layout>
     <div className="p-4">
       <div className="flex justify-between items-center">
