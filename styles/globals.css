@@ -42,3 +42,14 @@ input:focus, input:active{
 .sizes-block input{
     width: 75px;
 }
+
+.btn-cart-remove{
+    border: none;
+    padding: 0;
+    border-radius: 0;
+}
+
+.btn-cart-remove:hover, .btn-cart-remove:active{
+    background-color: #fff;
+    color: #56cfe1;
+}

@@ -2,9 +2,7 @@ import Layout from "@/components/Layout"
 import Link from "next/link"
 import { ChevronRightIcon } from '@heroicons/react/24/solid'
 
-export default function index(){
-
-    const getCategories = ["Bottoms", "Tops"]
+export default function Index(){
 
   return (
     <Layout>
