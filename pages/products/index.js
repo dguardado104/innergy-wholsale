@@ -4,7 +4,7 @@ import ProductItemSkeleton from "@/components/skeletons/ProductItemSkeleton"
 import { data } from "@/utils/data"
 import Link from "next/link"
 
-export default function Index({allProducts, setAllProducts}){
+export default function Index(){
 
   return (
   <Layout>
@@ -16,7 +16,7 @@ export default function Index({allProducts, setAllProducts}){
         </div>
       
         <div>
-          <Link href="/wholsales" legacyBehavior>
+          <Link href="/categories" legacyBehavior>
             <a className="btn">Back</a>
           </Link>
         </div>

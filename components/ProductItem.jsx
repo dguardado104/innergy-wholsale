@@ -43,8 +43,6 @@ export const ProductItem = ({product}) => {
 
       }
 
-      formInputs(existItem)
-
     }else{
       setCartItem({...product, options: 
         [
@@ -61,14 +59,15 @@ export const ProductItem = ({product}) => {
     
   }
 
-  const formInputs = (p) => { 
-    p.options.map(x => {
-      setForm({
-        ...form,
-        [x.size]: x.qty
-      })
-    })
-  }
+  const inputValue = (name) => {
+    if(state.cart.cartItems.length > 0){
+      const existItem = state.cart.cartItems.find(x => x.sku === product.sku)
+      const existOption = existItem ? existItem.options.find(y => y.size === name.size) : 0
+      return existOption || !existOption === 0 ? existOption.qty : 0
+    }else{
+      return 0
+    }
+   }
 
   useEffect(() => {
 
@@ -102,12 +101,12 @@ export const ProductItem = ({product}) => {
                 {option.size}
                 <span className="font-normal ml-1 text-xs">${option.price.toFixed(2)}</span>
               </label>
-              <input type="number" step="1" value={form[option.size]} onKeyUp={addToCartHandler} onChange={addToCartHandler} name={option.size} />
+              <input type="number" step="1" onKeyUp={addToCartHandler} onChange={addToCartHandler} name={option.size} />
             </div>
           ))
         }
       </form>
-      <div className="w-full md:w-1/3 flex justify-between mt-4 text-center">
+      <div className="w-full md:w-1/3 flex justify-evenly mt-4 text-center">
         <div>
           <span>Total Quantity</span><br />
           <span className="font-bold">{totalQuantity}</span>

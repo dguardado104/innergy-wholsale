@@ -14,14 +14,9 @@ export default function Header(){
   
   
   useEffect(() => {
-    
-    state.cart.cartItems.map(x => {
-      if(x.options){
-        setCartItemsCount(cartItemsCount + x.options.reduce((a, c) => a + c.qty, 0)) 
-      }
+
+    setCartItemsCount(state.cart.cartItems.length) 
       
-    })
-    
   }, [state.cart.cartItems])
   
   const [active, setActive] = useState(false)
