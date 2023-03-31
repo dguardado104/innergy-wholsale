@@ -1,7 +1,18 @@
 import { Store } from "@/utils/Store"
-import { useContext } from "react"
+import { useContext, useState, useEffect } from "react"
 
 export const ProductItem = ({product}) => {
+  const [cartItem, setCartItem] = useState({})
+  const [totalQuantity, setTotalQuantity] = useState(0)
+  const [totalPrice, setTotalPrice] = useState(0)
+  const [form, setForm] = useState({
+    xs: 0,
+    s: 0,
+    m: 0,
+    l: 0,
+    xl: 0,
+    xxl: 0
+  })
 
   // inicializar el estado
 
@@ -11,20 +22,66 @@ export const ProductItem = ({product}) => {
   // funcion para garegar al carrito
 
   const addToCartHandler = e => {
-    const {name} = e.target
-    const existItem = state.cart.cartItems.find(x => x.sku === product.sku)
-    const quantity = existItem ? existItem.quantity + 1 : 1
+    const {name, value} = e.target
 
-    
-    if(product.quantity[name] < quantity){
-      console.log('Sorry, product is out of stock')
-      return
+    const existItem = state.cart.cartItems.find(x => x.sku === product.sku)
+
+    if(existItem){
+      
+      const existOption = existItem.options.find(x => x.size == name)
+
+      if(existOption){
+
+        existOption.qty = Number(value)
+
+      }else{
+        existItem.options.push({
+          size: name,
+          qty: Number(value),
+          price: product.options.find(x => x.size === name).price
+        })
+
+      }
+
+      formInputs(existItem)
+
+    }else{
+      setCartItem({...product, options: 
+        [
+          {
+            size: name,
+            qty: Number(value),
+            price: product.options.find(x => x.size === name).price
+          }
+        ]
+      })
     }
 
-    dispatch({type: 'PRODUCT_ADD_ITEM', payload: {...product, quantity} })
-
+    dispatch({type: 'PRODUCT_ADD_ITEM', payload: {...cartItem}})
+    
   }
 
+  const formInputs = (p) => { 
+    p.options.map(x => {
+      setForm({
+        ...form,
+        [x.size]: x.qty
+      })
+    })
+  }
+
+  useEffect(() => {
+
+    const p = state.cart.cartItems.find(x => x.sku === product.sku)
+
+    if(p){
+      setTotalQuantity(p.options.reduce((a, c) => a + c.qty, 0))
+      setTotalPrice(p.options.reduce((a, c) => a + (c.qty * c.price), 0))
+    }
+
+
+  }, [product, state])
+  
 
   return (
     <div className="shadow p-2 flex flex-wrap items-center mb-4">
@@ -38,43 +95,26 @@ export const ProductItem = ({product}) => {
       </div>
       </div>
       <form className="flex flex-wrap gap-2 pl-2 w-3/4 md:w-1/3 sizes-block">
-        <div>
-          <label htmlFor="">XS</label>
-          <input type="number" step="1" onChange={addToCartHandler} name="xs" />
-        </div>
-        <div>
-          <label htmlFor="">S</label>
-          <input type="number" step="1" onChange={addToCartHandler} name="s" />
-        </div>
-        <div>
-          <label htmlFor="">M</label>
-          <input type="number" step="1" onChange={addToCartHandler} name="m" />
-        </div>
-        <div>
-          <label htmlFor="">L</label>
-          <input type="number" step="1" onChange={addToCartHandler} name="l" />
-        </div>
-        <div>
-          <label htmlFor="">XL</label>
-          <input type="number" step="1" onChange={addToCartHandler} name="xl" />
-        </div>
-        <div>
-          <label htmlFor="">2XL</label>
-          <input type="number" step="1" onChange={addToCartHandler} name="xxl" />
-        </div>
+        {
+          product.options.map((option, key) => (
+            <div key={key}>
+              <label htmlFor={option.size} className="font-bold uppercase">
+                {option.size}
+                <span className="font-normal ml-1 text-xs">${option.price.toFixed(2)}</span>
+              </label>
+              <input type="number" step="1" value={form[option.size]} onKeyUp={addToCartHandler} onChange={addToCartHandler} name={option.size} />
+            </div>
+          ))
+        }
       </form>
       <div className="w-full md:w-1/3 flex justify-between mt-4 text-center">
         <div>
-          <span>Unit price</span><br />
-          <span className="font-bold">${product.unitPrice.toFixed(2)}</span>
-        </div>
-        <div>
-          <span>Quantity</span><br />
-          <span className="font-bold">{state.cart.cartItems.reduce((a, c) => a + c.quantity, 0)}</span>
+          <span>Total Quantity</span><br />
+          <span className="font-bold">{totalQuantity}</span>
         </div>
         <div>
           <span>Total</span><br />
-          <span className="font-bold">${state.cart.cartItems.reduce((a, c) => a + c.quantity * c.unitPrice, 0)}</span>
+          <span className="font-bold">${totalPrice}</span>
         </div>
       </div>
     </div>

@@ -18,15 +18,15 @@ export default function Index(){
 						</Link>
 					</div>
 				</div>
-				<div className="mt-4">
-					<Link href="/wholsales/products" legacyBehavior>
-						<a className="border-b-2 p-4 w-full flex justify-between items-center gap-2 hover:bg-slate-200 ">
+				<div className="mt-4 flex gap-2">
+					<Link href="/products" legacyBehavior>
+						<a className="shadow transition p-4 w-1/2 flex justify-between items-center  gap-2 hover:bg-slate-200 md:w-1/3">
 							<span className="font-bold text-xl">Bottoms</span>
 							<ChevronRightIcon className="h-6 w-6"/>
 						</a>
 					</Link>
-					<Link href="/wholsales/products" legacyBehavior>
-						<a className="border-b-2 p-4 w-full flex justify-between items-center gap-2 hover:bg-slate-200 ">
+					<Link href="/products" legacyBehavior>
+						<a className="shadow transition p-4 w-1/2 flex justify-between items-center  gap-2 hover:bg-slate-200 md:w-1/3">
 							<span className="font-bold text-xl">Tops</span>
 							<ChevronRightIcon className="h-6 w-6"/>
 						</a>
