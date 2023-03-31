@@ -20,8 +20,6 @@ function reducer(state, action){
 
       state.cart.cartItems = state.cart.cartItems.filter(obj => typeof obj === "object" && Object.keys(obj).length > 0)
 
-      console.log(state.cart.cartItems);
-
       const cartItems = existItem ? state.cart.cartItems.map(item => item.sku === existItem.sku ? newItem: item) : [...state.cart.cartItems, newItem]
 
       return {...state, cart: {...state.cart, cartItems}}

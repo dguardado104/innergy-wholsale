@@ -1,23 +1,39 @@
 import { useState, useContext, useEffect } from "react"
 import { Store } from "@/utils/Store"
-import { XMarkIcon } from "@heroicons/react/24/solid"
 
 export default function Header(){
   
   const {state, dispatch} = useContext(Store)
   const { cart } = state
   const [cartItemsCount, setCartItemsCount] = useState(0)
+  const [cartItemsTotal, setCartItemsTotal] = useState(0)
   
   const removeCartHandler = (item) => {
     dispatch({type: 'CART_REMOVE_ITEM', payload: item})
   }
+
+    
   
   
   useEffect(() => {
 
-    setCartItemsCount(state.cart.cartItems.length) 
-      
-  }, [state.cart.cartItems])
+    setCartItemsCount(cart.cartItems.length) 
+
+    let total = 0
+
+    if(cart.cartItems.length > 0){
+      cart.cartItems.map(x => {
+        if(x.options){
+          
+            total += x.options.reduce((a, c) => a + (c.qty * c.price), 0)
+          
+        }   
+      })
+    }
+
+    setCartItemsTotal(total)
+
+  }, [cart.cartItems])
   
   const [active, setActive] = useState(false)
   
@@ -31,7 +47,7 @@ export default function Header(){
           <span className="font-bold">John Doe</span>
         </div>
         <div>
-          <button onClick={() => setActive(!active) }>Cart {cartItemsCount}</button>
+          <button onClick={() => setActive(!active)}>Cart {cartItemsCount}</button>
         </div>
       </div>
     
@@ -47,20 +63,25 @@ export default function Header(){
               cart.cartItems.map((item, key) => (
                 <div className="flex items-center py-4 mx-2 border-b-2" key={key}>
                   <div className="w-1/4 flex justify-center text-sm">
+                    <img src={item.image} alt={`Product-${item.sku}`} className="w-10 h-10 object-contain" />
+                  </div>
+                  <div className="w-1/4 flex justify-center text-sm">
                     {item.sku}
                   </div>
                   <div className="w-1/4 flex justify-center text-sm">
-                    $0
+                    {
+                      item.options ? item.options.reduce((a, c) => a + c.qty, 0) : 0
+                    }
                   </div>
                   <div className="w-1/4 flex justify-center">
-                    
+                    Total ${item.options ? item.options.reduce((a, c) => a + (c.qty * c.price), 0) : 0}
                   </div>
                 </div>
               ))
             }  
             </div>
             <div className="py-4 text-center">
-              Total 0
+              Total ({cartItemsCount}): ${cartItemsTotal}
             </div>
             <div className="flex justify-center p-2">
               <button>Confirm Order</button>

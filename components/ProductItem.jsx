@@ -5,14 +5,6 @@ export const ProductItem = ({product}) => {
   const [cartItem, setCartItem] = useState({})
   const [totalQuantity, setTotalQuantity] = useState(0)
   const [totalPrice, setTotalPrice] = useState(0)
-  const [form, setForm] = useState({
-    xs: 0,
-    s: 0,
-    m: 0,
-    l: 0,
-    xl: 0,
-    xxl: 0
-  })
 
   // inicializar el estado
 
@@ -23,6 +15,11 @@ export const ProductItem = ({product}) => {
 
   const addToCartHandler = e => {
     const {name, value} = e.target
+
+    if(value > product.options.find(x => x.size === name).qty){
+      alert('The maximum quantity in stock has been reached!')
+      return
+    }
 
     const existItem = state.cart.cartItems.find(x => x.sku === product.sku)
 
@@ -59,16 +56,6 @@ export const ProductItem = ({product}) => {
     
   }
 
-  const inputValue = (name) => {
-    if(state.cart.cartItems.length > 0){
-      const existItem = state.cart.cartItems.find(x => x.sku === product.sku)
-      const existOption = existItem ? existItem.options.find(y => y.size === name.size) : 0
-      return existOption || !existOption === 0 ? existOption.qty : 0
-    }else{
-      return 0
-    }
-   }
-
   useEffect(() => {
 
     const p = state.cart.cartItems.find(x => x.sku === product.sku)
@@ -101,7 +88,7 @@ export const ProductItem = ({product}) => {
                 {option.size}
                 <span className="font-normal ml-1 text-xs">${option.price.toFixed(2)}</span>
               </label>
-              <input type="number" step="1" onKeyUp={addToCartHandler} onChange={addToCartHandler} name={option.size} />
+              <input type="number" min={0} max={option.qty} step="1" onKeyUp={addToCartHandler} onChange={addToCartHandler} name={option.size} />
             </div>
           ))
         }
