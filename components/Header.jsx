@@ -1,5 +1,6 @@
 import { useState, useContext, useEffect } from "react"
 import { Store } from "@/utils/Store"
+import MenuUser from "./MenuUser"
 
 export default function Header(){
   
@@ -11,9 +12,6 @@ export default function Header(){
   const removeCartHandler = (item) => {
     dispatch({type: 'CART_REMOVE_ITEM', payload: item})
   }
-
-    
-  
   
   useEffect(() => {
 
@@ -24,9 +22,7 @@ export default function Header(){
     if(cart.cartItems.length > 0){
       cart.cartItems.map(x => {
         if(x.options){
-          
-            total += x.options.reduce((a, c) => a + (c.qty * c.price), 0)
-          
+          total += x.options.reduce((a, c) => a + (c.qty * c.price), 0)
         }   
       })
     }
@@ -44,7 +40,7 @@ export default function Header(){
       </div>
       <div className="flex items-center gap-2">
         <div>
-          <span className="font-bold">John Doe</span>
+          <MenuUser />
         </div>
         <div>
           <button onClick={() => setActive(!active)}>Cart {cartItemsCount}</button>
@@ -65,7 +61,7 @@ export default function Header(){
                   <div className="w-1/4 flex justify-center text-sm">
                     <img src={item.image} alt={`Product-${item.sku}`} className="w-10 h-10 object-contain" />
                   </div>
-                  <div className="w-1/4 flex justify-center text-sm">
+                  <div className="w-1/4 flex justify-center text-sm capitalize">
                     {item.sku}
                   </div>
                   <div className="w-1/4 flex justify-center text-sm">
